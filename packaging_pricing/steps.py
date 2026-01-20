@@ -98,8 +98,8 @@ class MaterialCostStep(CalculationStep):
         labor_cost = salary_rate * c.k1_salary_coeff
 
         # 4. Стоимость коробки (упаковки)
-        # Согласно ТЗ: box_cost / 1000. Предполагается удельная стоимость на единицу.
-        box_unit_cost = c.box_cost / 1000.0
+        # Согласно обновленному требованию: box_cost / 2000. В коробке 2000 шт.
+        box_unit_cost = c.box_cost / 2000.0
 
         # 5. Стоимость опций (glue, clips, euroslot)
         # feature_rates содержит цену за см (для клея/слота) или за штуку (клипсы).
@@ -171,6 +171,6 @@ class PricingStep(CalculationStep):
             details={
                 "electricity": context.get_intermediate('electricity'),
                 "salary_rate": context.get_intermediate('salary_rate'),
-                "box_component": c.box_cost / 1000.0
+                "box_component": c.box_cost / 2000.0
             }
         )
