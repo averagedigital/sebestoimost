@@ -52,7 +52,7 @@ class LaborCostStep(CalculationStep):
 
         salary_rate = 0.0
         
-        if is_wicket:
+        if is_wicket or i.features.glue_tape: # Клеевой клапан приравнивается к сложной категории (Викет) по ЗП
             if width <= 25:
                 salary_rate = c.salary_wicket_small
             else:
