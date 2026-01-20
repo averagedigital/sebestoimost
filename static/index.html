@@ -26,6 +26,24 @@
                     <div class="card input-card">
                         <form id="calcForm">
                             <div class="form-section">
+                                <label class="section-label">Номенклатурная Группа</label>
+                                <div class="field">
+                                    <select name="nomenclature_group">
+                                        <option value="Пакеты полипропиленовые 2А">Пакеты полипропиленовые 2А</option>
+                                        <option value="Майки собственного производства">Майки собственного производства
+                                        </option>
+                                        <option value="Пакеты фасовочные собственного производства">Пакеты фасовочные
+                                        </option>
+                                        <option value="Пакеты для мусора 2А">Пакеты для мусора</option>
+                                        <option value="Сумки собственного производства">Сумки</option>
+                                        <option value="Пленки б/п">Пленки б/п</option>
+                                        <option value="Заказная продукция собственного производства">Заказная продукция
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
                                 <label class="section-label">Тип Продукта</label>
                                 <div class="segmented-control">
                                     <label>
@@ -169,6 +187,19 @@
                                 <span>Итоговая цена</span>
                                 <div class="main-price" id="finalPrice">0.00 ₽</div>
                                 <span class="unit">за единицу</span>
+                            </div>
+
+                            <!-- Formula Results -->
+                            <div class="formula-results"
+                                style="background: #f8fafc; border-radius: 12px; padding: 16px; margin: 16px 0;">
+                                <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 8px;">Расчёт по формулам
+                                    ТЗ:</div>
+                                <div style="font-family: monospace; font-size: 0.9rem; line-height: 1.8;">
+                                    <div><strong>Вес пакета</strong> = <span id="formulaWeight">0</span> г</div>
+                                    <div><strong>Переменная себестоимость</strong> = <span id="formulaVC">0</span> ₽
+                                    </div>
+                                    <div><strong>Цена</strong> = <span id="formulaPrice">0</span> ₽</div>
+                                </div>
                             </div>
 
                             <div class="kpi-row">

@@ -46,26 +46,36 @@ def generate_row_data(order: OrderInput, result: CalculationResult) -> dict:
         
     product_name = f"Пакет {order.product_type.value} {' '.join(feat_str)} {dims} {order.thickness}мкм"
 
-    # 2. Calculate Totals
+    # 2. Calculate Values (PER UNIT, not per batch!)
     qty = order.quantity
     total_weight_kg = (result.weight_grams * qty) / 1000.0
     
-    # Unit/Total Costs
+    # Unit Costs (already per unit from result)
     elec_unit = result.details.get('electricity', 0.0)
     box_unit = result.details.get('box_component', 0.0)
     mat_unit = result.material_cost + result.scrap_cost
+    labor_unit = result.labor_cost
+    overhead_unit = result.overhead_cost # ROP part
     
-    total_labor = result.labor_cost * qty
-    total_elec = elec_unit * qty
-    total_box = box_unit * qty
-    total_mat = mat_unit * qty
-    total_overhead = result.overhead_cost * qty
-    total_cost = (result.variable_cost + result.overhead_cost) * qty
+    # Variable cost per unit
+    vc_unit = result.variable_cost
+    # Margin component per unit: VC / K2
+    # "Постоянные расходы" по логике Price = (VC/K2 + VC)...
+    fixed_costs_unit = vc_unit / 2.3
+    
+    # Margin multiplier component: (VC/K2 + VC) * (K3 - 1)
+    # "Риски" (Profit/Margin)
+    base_for_k3 = fixed_costs_unit + vc_unit
+    risks_unit = base_for_k3 * (1.7 - 1.0) # K3=1.7. Taking the delta.
 
-    # 3. Create Row Dict
+    # Total Cost per unit (Final Price)
+    total_cost_unit = result.final_price
+
+    # 3. Create Row Dict (all values per UNIT, matching Excel format)
+    # ZERO out fields that user asked not to fill (Electricity, Box, etc are inside VC/Total but not in cols)
     return {
         'Номенклатурная группа': 'Пакеты (Расчет)',
-        'Родственность': '',
+        'Родственность': 'ГУ пакеты',
         'Продукция': product_name,
         'Единица хранения остатков': 'шт',
         'Код': '',
@@ -74,20 +84,20 @@ def generate_row_data(order: OrderInput, result: CalculationResult) -> dict:
         'Вес': round(total_weight_kg, 3),
         'Краска': 0,
         'Скотч': 0,
-        'Расходы на электроэнергию': round(total_elec, 2),
-        'Упаковка': round(total_box, 2),
+        'Расходы на электроэнергию': 0, # Included in VC/Total but invalid for column
+        'Упаковка': 0, # Included in VC/Total but invalid for column
         'Втулка': 0,
-        'ЗП ИТОГО': round(total_labor, 2),
+        'ЗП ИТОГО': round(labor_unit, 4),
         'ЗП выгонка': 0, 
         'ЗП ламинация': 0,
         'ЗП печать': 0,
-        'ЗП рубка': round(total_labor, 2),
+        'ЗП рубка': 0, # User said only 'ЗП ИТОГО'
         'ЗП резка': 0,
-        'Сырье': round(total_mat, 2),
-        'Постоянные расходы ГУ': round(total_overhead, 2), # ROP
-        'Постоянные расходы': round((result.variable_cost * qty) / 2.3, 2), # VC / K2
-        'Риски': 0,
-        'Общая себестоимость': round(total_cost, 2)
+        'Сырье': round(mat_unit, 4),
+        'Постоянные расходы ГУ': round(overhead_unit, 4),
+        'Постоянные расходы': round(fixed_costs_unit, 4),
+        'Риски': round(risks_unit, 4),
+        'Общая себестоимость': round(total_cost_unit, 4)
     }
 
 def generate_excel_bytes(order: OrderInput, result: CalculationResult) -> io.BytesIO:

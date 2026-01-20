@@ -242,6 +242,11 @@ function renderResult(data) {
     document.getElementById("weightVal").textContent = data.weight_grams.toFixed(2) + " г";
     document.getElementById("scrapVal").textContent = data.scrap_rate_percent + "%";
 
+    // Formula results
+    document.getElementById("formulaWeight").textContent = data.weight_grams.toFixed(4);
+    document.getElementById("formulaVC").textContent = data.variable_cost.toFixed(4);
+    document.getElementById("formulaPrice").textContent = data.final_price.toFixed(4);
+
     const metrics = {
         material: data.material_cost,
         scrap: data.scrap_cost,
