@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  cost-calculator:
+    build: .
+    container_name: cost-calculator
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Moscow

@@ -1,0 +1,37 @@
+# Data files
+*.csv
+*.xls
+*.xlsx
+
+# Documents
+*.pdf
+*.doc
+*.docx
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Temp/Test files
+dump_*.csv
+Verification_*.xlsx
+Calculation_*.xlsx
+*_Analysis.xlsx
+
+# Dev scripts (keep only production)
+analyze_data.py
+extract_schemes.py
+extract_schemes_full.py
+generate_packages_table.py
+generate_preview.py
+verify_prices.py

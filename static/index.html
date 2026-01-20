@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расчет Себестоимости</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layout-container">
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="calculator">Калькулятор</button>
+            <button class="tab-btn" data-tab="settings">Настройки Экономиста</button>
+        </nav>
+
+        <main>
+            <!-- CALCULATOR TAB -->
+            <section id="calculator" class="tab-content active">
+                <div class="split-view">
+                    <!-- Left: Inputs -->
+                    <div class="card input-card">
+                        <form id="calcForm">
+                            <div class="form-section">
+                                <label class="section-label">Тип Продукта</label>
+                                <div class="segmented-control">
+                                    <label>
+                                        <input type="radio" name="product_type" value="BOPP" checked>
+                                        <span>BOPP</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="product_type" value="CPP">
+                                        <span>CPP</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <label class="section-label">Схема Печати</label>
+                                <div class="field">
+                                    <select name="print_scheme">
+                                        <option value="б/печати">б/печати</option>
+                                        <option value="1+0">1+0</option>
+                                        <option value="1+1">1+1</option>
+                                        <option value="1+2">1+2</option>
+                                        <option value="1б+0">1б+0</option>
+                                        <option value="2+0">2+0</option>
+                                        <option value="2+2">2+2</option>
+                                        <option value="3+0">3+0</option>
+                                        <option value="3+1">3+1</option>
+                                        <option value="3+2">3+2</option>
+                                        <option value="3+3">3+3</option>
+                                        <option value="4+0">4+0</option>
+                                        <option value="4+2">4+2</option>
+                                        <option value="4+3">4+3</option>
+                                        <option value="4+4">4+4</option>
+                                        <option value="4+5">4+5</option>
+                                        <option value="4+П6">4+П6</option>
+                                        <option value="5+0">5+0</option>
+                                        <option value="5+5">5+5</option>
+                                        <option value="6+0">6+0</option>
+                                        <option value="6+2">6+2</option>
+                                        <option value="П3+0">П3+0</option>
+                                        <option value="П3+П3">П3+П3</option>
+                                        <option value="П4+0">П4+0</option>
+                                        <option value="П4+1">П4+1</option>
+                                        <option value="П4+2">П4+2</option>
+                                        <option value="П4+3">П4+3</option>
+                                        <option value="П4+П4">П4+П4</option>
+                                        <option value="П4+П5">П4+П5</option>
+                                        <option value="П5+0">П5+0</option>
+                                        <option value="П5+1">П5+1</option>
+                                        <option value="П5+2">П5+2</option>
+                                        <option value="П5+3">П5+3</option>
+                                        <option value="П5+П5">П5+П5</option>
+                                        <option value="П6+0">П6+0</option>
+                                        <option value="П6+3">П6+3</option>
+                                        <option value="П6+П6">П6+П6</option>
+                                        <option value="П7+0">П7+0</option>
+                                        <option value="П7+П7">П7+П7</option>
+                                        <option value="П8+0">П8+0</option>
+                                        <option value="П8+3">П8+3</option>
+                                        <option value="П8+П6">П8+П6</option>
+                                        <option value="П8+П8">П8+П8</option>
+                                        <option value="коронирование">коронирование</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid-2">
+                                <div class="field">
+                                    <label>Ширина (см)</label>
+                                    <input type="number" name="width" value="20" step="0.1" required>
+                                </div>
+                                <div class="field">
+                                    <label>Длина (см)</label>
+                                    <input type="number" name="length" value="30" step="0.1" required>
+                                </div>
+                                <div class="field">
+                                    <label>Фальц (см)</label>
+                                    <input type="number" name="fold" value="0" step="0.1">
+                                </div>
+                                <div class="field">
+                                    <label>Клапан (см)</label>
+                                    <input type="number" name="flap" value="0" step="0.1">
+                                </div>
+                                <div class="field">
+                                    <label>Толщина (мкм)</label>
+                                    <input type="number" name="thickness" value="30" step="1" required>
+                                </div>
+                                <div class="field">
+                                    <label>Тираж (шт)</label>
+                                    <input type="number" name="quantity" value="40000" step="1000" required>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <label class="section-label">Дополнительные Опции</label>
+                                <div class="toggles-list">
+                                    <label class="toggle-row">
+                                        <span>Пакет Викет</span>
+                                        <input type="checkbox" name="is_wicket">
+                                        <div class="toggle-switch"></div>
+                                    </label>
+                                    <label class="toggle-row">
+                                        <span>Клеевой клапан</span>
+                                        <input type="checkbox" name="glue_tape">
+                                        <div class="toggle-switch"></div>
+                                    </label>
+                                    <label class="toggle-row">
+                                        <span>Мертвый скотч</span>
+                                        <input type="checkbox" name="dead_tape">
+                                        <div class="toggle-switch"></div>
+                                    </label>
+                                    <label class="toggle-row">
+                                        <span>Клипсы</span>
+                                        <input type="checkbox" name="clips">
+                                        <div class="toggle-switch"></div>
+                                    </label>
+                                </div>
+                                <div class="field mt-2">
+                                    <label>Еврослот</label>
+                                    <select name="euroslot">
+                                        <option value="">Нет</option>
+                                        <option value="pvd">PVD (Усиленный)</option>
+                                        <option value="bopp">BOPP (Обычный)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="cta-button">Рассчитать Стоимость</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Results -->
+                    <div class="card result-card">
+                        <div id="emptyState" class="empty-placeholder">
+                            Заполните параметры, чтобы увидеть расчет
+                        </div>
+
+                        <div id="resultContent" class="hidden">
+                            <div class="result-header">
+                                <span>Итоговая цена</span>
+                                <div class="main-price" id="finalPrice">0.00 ₽</div>
+                                <span class="unit">за единицу</span>
+                            </div>
+
+                            <div class="kpi-row">
+                                <div class="kpi-item">
+                                    <span class="label">Вес</span>
+                                    <span class="value" id="weightVal">0 г</span>
+                                </div>
+                                <div class="kpi-item">
+                                    <span class="label">Брак</span>
+                                    <span class="value" id="scrapVal">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="cost-breakdown">
+                                <h5>Структура Себестоимости</h5>
+                                <div class="breakdown-item">
+                                    <div class="bd-info">
+                                        <span>Материалы</span>
+                                        <span id="valMaterial">0.00</span>
+                                    </div>
+                                    <div class="progress-bg">
+                                        <div class="progress-fill" id="barMaterial"></div>
+                                    </div>
+                                </div>
+                                <div class="breakdown-item">
+                                    <div class="bd-info">
+                                        <span>Отходы</span>
+                                        <span id="valScrap">0.00</span>
+                                    </div>
+                                    <div class="progress-bg">
+                                        <div class="progress-fill" id="barScrap"></div>
+                                    </div>
+                                </div>
+                                <div class="breakdown-item">
+                                    <div class="bd-info">
+                                        <span>Труд и Энергия</span>
+                                        <span id="valLabor">0.00</span>
+                                    </div>
+                                    <div class="progress-bg">
+                                        <div class="progress-fill" id="barLabor"></div>
+                                    </div>
+                                </div>
+                                <div class="breakdown-item">
+                                    <div class="bd-info">
+                                        <span>Опции и Упаковка</span>
+                                        <span id="valOptions">0.00</span>
+                                    </div>
+                                    <div class="progress-bg">
+                                        <div class="progress-fill" id="barOptions"></div>
+                                    </div>
+                                </div>
+                                <div class="breakdown-item">
+                                    <div class="bd-info">
+                                        <span>Накладные (ROP)</span>
+                                        <span id="valOverhead">0.00</span>
+                                    </div>
+                                    <div class="progress-bg">
+                                        <div class="progress-fill" id="barOverhead"></div>
+                                    </div>
+                                </div>
+
+                                <span id="valVC">0.00</span>
+                            </div>
+
+                            <button type="button" id="exportBtn" class="cta-button"
+                                style="background: #e2e8f0; color: #1a202c; margin-top: 20px;">
+                                Скачать Excel Отчет
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Excel Preview Table -->
+                <div id="previewContainer" class="card mt-4 hidden">
+                    <h3>Предпросмотр (Excel)</h3>
+                    <div class="table-responsive">
+                        <table id="previewTable">
+                            <thead>
+                                <tr id="previewHeader"></tr>
+                            </thead>
+                            <tbody>
+                                <tr id="previewBody"></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS TAB (ECONOMIST) -->
+            <section id="settings" class="tab-content">
+                <div class="card settings-card">
+                    <h3>Параметры Экономиста</h3>
+                    <form id="configForm">
+                        <div class="split-view">
+                            <!-- Column 1: Monthly Updates -->
+                            <div class="card">
+                                <h4 style="margin-bottom: 20px; color: var(--accent);">Ежемесячные Обновления</h4>
+
+                                <!-- Materials -->
+                                <div class="form-section">
+                                    <label class="section-label">Сырье и Упаковка</label>
+                                    <div class="field">
+                                        <label>Плотность (г/см³)</label>
+                                        <input type="number" name="density" step="0.01" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>BOPP цена (руб/кг)</label>
+                                        <input type="number" name="material_price_bopp" step="0.1" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>CPP цена (руб/кг)</label>
+                                        <input type="number" name="material_price_cpp" step="0.1" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>Коробка (руб/шт)</label>
+                                        <input type="number" name="box_cost" step="0.1" required>
+                                    </div>
+                                </div>
+
+                                <!-- Coefficients -->
+                                <div class="form-section">
+                                    <label class="section-label">Коэффициенты</label>
+                                    <div class="field">
+                                        <label>К1 (Коэфф. ЗП)</label>
+                                        <input type="number" name="k1_salary_coeff" step="0.1" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>К2 (Делитель Маржи)</label>
+                                        <input type="number" name="k2_margin_divisor" step="0.1" required>
+                                    </div>
+                                </div>
+
+                                <!-- Options Rates (Monthly) -->
+                                <div class="form-section">
+                                    <label class="section-label">Тарифы Опций (руб)</label>
+                                    <div class="field">
+                                        <label>Клей (за см)</label>
+                                        <input type="number" name="rate_glue" step="0.01" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>Мертвый скотч (за см)</label>
+                                        <input type="number" name="rate_dead_glue" step="0.01" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>Клипсы (за шт)</label>
+                                        <input type="number" name="rate_clips" step="0.01" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>Еврослот PVD (за см)</label>
+                                        <input type="number" name="rate_euroslot_pvd" step="0.01" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>Еврослот BOPP (за см)</label>
+                                        <input type="number" name="rate_euroslot_bopp" step="0.01" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 2: Yearly Updates -->
+                            <div class="card">
+                                <h4 style="margin-bottom: 20px; color: var(--text-second);">Ежегодные / Редкие</h4>
+
+                                <!-- Global Params -->
+                                <div class="form-section">
+                                    <label class="section-label">Глобальные Параметры</label>
+                                    <div class="field">
+                                        <label>Возврат отходов (руб/кг)</label>
+                                        <input type="number" name="scrap_return_price" step="0.1" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>ROP Накладные (руб/кг)</label>
+                                        <input type="number" name="rop_overhead" step="0.1" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>К3 (Множитель Маржи)</label>
+                                        <input type="number" name="k3_margin_multiplier" step="0.1" required>
+                                    </div>
+                                </div>
+
+                                <!-- Energy & Labor -->
+                                <div class="form-section">
+                                    <label class="section-label">Энергия и Труд</label>
+                                    <div class="field">
+                                        <label>Электричество (руб)</label>
+                                        <input type="number" name="electricity_rate" step="0.0001" required>
+                                    </div>
+                                    <label class="section-label mt-2">Зарплаты (Таблица)</label>
+                                    <div class="field">
+                                        <label>Стандарт &lt; 25см</label>
+                                        <input type="number" name="salary_std_small" step="0.001" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>Стандарт &gt; 25см</label>
+                                        <input type="number" name="salary_std_large" step="0.001" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>Викет &lt; 25см</label>
+                                        <input type="number" name="salary_wicket_small" step="0.001" required>
+                                    </div>
+                                    <div class="field mt-2">
+                                        <label>Викет &gt; 25см</label>
+                                        <input type="number" name="salary_wicket_large" step="0.001" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <label class="section-label">Прочее</label>
+                                    <div class="faded" style="font-size: 0.8rem;">
+                                        * Брак рассчитывается автоматически по таблице (6-15%)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="save-btn">Сохранить Настройки</button>
+                            <span id="saveStatus" class="faded"></span>
+                        </div>
+                    </form>
+            </section>
+            </form>
+    </div>
+    </section>
+    </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
