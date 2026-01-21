@@ -4,13 +4,13 @@
 
 ```bash
 # 1. Клонировать репозиторий
-git clone <repo-url> && cd рассчетсебестоимости
+git clone https://github.com/averagedigital/sebestoimost.git && cd sebestoimost
 
 # 2. Запустить
-docker-compose up -d --build
+docker compose up -d --build
 
 # 3. Открыть
-http://<server-ip>:8000
+http://<server-ip>:8001
 ```
 
 ## Без Docker
@@ -69,4 +69,49 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
     }
 }
+```
+
+## Обновление приложения
+
+### Docker (рекомендуется)
+```bash
+# 1. Зайти на сервер
+ssh user@your-server-ip
+
+# 2. Перейти в папку
+cd рассчетсебестоимости
+
+# 3. Получить обновления
+git pull origin main
+
+# 4. Пересобрать и перезапустить
+docker compose up -d --build
+# ПРИМЕЧАНИЕ: Если команда docker compose (с пробелом) недоступна, используйте docker-compose (с дефисом)
+```
+
+### Устранение неполадок (Troubleshooting)
+
+**Ошибка: `Traceback ... /usr/lib/python3/dist-packages/ur...` при запуске docker-compose**
+
+Это проблема старой версии `docker-compose`, установленной через apt/python.
+Решение: использовать новую команду `docker compose` (v2) или переустановить:
+
+Вариант 1 (рекомендуемый): Попробуйте запустить с пробелом:
+```bash
+docker compose up -d --build
+```
+
+Вариант 2 (обновить старый docker-compose):
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+### Без Docker (Systemd)
+```bash
+cd рассчетсебестоимости
+git pull origin main
+source venv/bin/activate
+pip install -r requirements.txt
+sudo systemctl restart cost-calc
 ```
