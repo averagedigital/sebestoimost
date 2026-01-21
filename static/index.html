@@ -44,7 +44,16 @@
                             </div>
 
                             <div class="form-section">
-                                <label class="section-label">Тип Продукта</label>
+                                <label class="section-label">Вид продукции</label>
+                                <div class="field">
+                                    <select name="product_kind">
+                                        <option value="bag" selected>Пакет</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <label class="section-label">Материал</label>
                                 <div class="segmented-control">
                                     <label>
                                         <input type="radio" name="product_type" value="BOPP" checked>
@@ -141,7 +150,7 @@
                                 <div class="toggles-list">
                                     <label class="toggle-row">
                                         <span>Пакет Викет</span>
-                                        <input type="checkbox" name="is_wicket">
+                                        <input type="checkbox" name="is_wicket" id="wicketToggle">
                                         <div class="toggle-switch"></div>
                                     </label>
                                     <label class="toggle-row">
@@ -150,13 +159,8 @@
                                         <div class="toggle-switch"></div>
                                     </label>
                                     <label class="toggle-row">
-                                        <span>Мертвый скотч</span>
+                                        <span>Мёртвый скотч</span>
                                         <input type="checkbox" name="dead_tape">
-                                        <div class="toggle-switch"></div>
-                                    </label>
-                                    <label class="toggle-row">
-                                        <span>Клипсы</span>
-                                        <input type="checkbox" name="clips">
                                         <div class="toggle-switch"></div>
                                     </label>
                                 </div>
@@ -164,8 +168,8 @@
                                     <label>Еврослот</label>
                                     <select name="euroslot">
                                         <option value="">Нет</option>
-                                        <option value="pvd">PVD (Усиленный)</option>
-                                        <option value="bopp">BOPP (Обычный)</option>
+                                        <option value="pvd">ПВД (усиленный)</option>
+                                        <option value="bopp">БОПП (обычный)</option>
                                     </select>
                                 </div>
                             </div>
@@ -420,10 +424,7 @@
                         </div>
                     </form>
             </section>
-            </form>
-    </div>
-    </section>
-    </main>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>

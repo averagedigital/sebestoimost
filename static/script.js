@@ -37,6 +37,22 @@ document.addEventListener("DOMContentLoaded", () => {
             await exportExcel();
         });
     }
+
+    // 6. Mutually exclusive glue options
+    const glueInput = document.querySelector('input[name="glue_tape"]');
+    const deadGlueInput = document.querySelector('input[name="dead_tape"]');
+    if (glueInput && deadGlueInput) {
+        glueInput.addEventListener("change", () => {
+            if (glueInput.checked) {
+                deadGlueInput.checked = false;
+            }
+        });
+        deadGlueInput.addEventListener("change", () => {
+            if (deadGlueInput.checked) {
+                glueInput.checked = false;
+            }
+        });
+    }
 });
 
 async function fetchConfig() {
@@ -129,6 +145,7 @@ async function saveConfig() {
 function getPayloadFromForm() {
     const formData = new FormData(document.getElementById("calcForm"));
     return {
+        product_kind: formData.get("product_kind") || "bag",
         product_type: formData.get("product_type"),
         width: parseFloat(formData.get("width")),
         length: parseFloat(formData.get("length")),
@@ -136,7 +153,7 @@ function getPayloadFromForm() {
         flap: parseFloat(formData.get("flap")) || 0,
         thickness: parseFloat(formData.get("thickness")),
         quantity: parseInt(formData.get("quantity")),
-        print_scheme: formData.get("print_scheme") || "Без печати",
+        print_scheme: formData.get("print_scheme") || "б/печати",
         features: {
             is_wicket: formData.get("is_wicket") === "on",
             glue_tape: formData.get("glue_tape") === "on",

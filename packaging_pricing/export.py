@@ -29,9 +29,10 @@ COLUMNS = [
     'Общая себестоимость'
 ]
 
-def generate_row_data(order: OrderInput, result: CalculationResult) -> dict:
+def generate_row_data(order: OrderInput, result: CalculationResult, k2: float = 2.3, k3: float = 1.7) -> dict:
     """
     Generates the dictionary representing the single row of Excel data.
+    k2, k3 - margin coefficients from config
     """
     # 1. Format Product Name
     feat_str = []
@@ -61,12 +62,12 @@ def generate_row_data(order: OrderInput, result: CalculationResult) -> dict:
     vc_unit = result.variable_cost
     # Margin component per unit: VC / K2
     # "Постоянные расходы" по логике Price = (VC/K2 + VC)...
-    fixed_costs_unit = vc_unit / 2.3
+    fixed_costs_unit = vc_unit / k2
     
     # Margin multiplier component: (VC/K2 + VC) * (K3 - 1)
     # "Риски" (Profit/Margin)
     base_for_k3 = fixed_costs_unit + vc_unit
-    risks_unit = base_for_k3 * (1.7 - 1.0) # K3=1.7. Taking the delta.
+    risks_unit = base_for_k3 * (k3 - 1.0)
 
     # Total Cost per unit (Final Price)
     total_cost_unit = result.final_price
@@ -100,11 +101,11 @@ def generate_row_data(order: OrderInput, result: CalculationResult) -> dict:
         'Общая себестоимость': round(total_cost_unit, 4)
     }
 
-def generate_excel_bytes(order: OrderInput, result: CalculationResult) -> io.BytesIO:
+def generate_excel_bytes(order: OrderInput, result: CalculationResult, k2: float = 2.3, k3: float = 1.7) -> io.BytesIO:
     """
     Generates an Excel file replicating the structure of the source cost data.
     """
-    row_data = generate_row_data(order, result)
+    row_data = generate_row_data(order, result, k2, k3)
     df = pd.DataFrame([row_data], columns=COLUMNS)
     
     output = io.BytesIO()

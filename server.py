@@ -98,7 +98,7 @@ def preview_table(order: OrderInput):
     
     try:
         result = pipeline.calculate(order)
-        row_data = generate_row_data(order, result)
+        row_data = generate_row_data(order, result, current_config.k2_margin_divisor, current_config.k3_margin_multiplier)
         return row_data
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -119,7 +119,7 @@ def export_excel(order: OrderInput):
     result = pipeline.calculate(order)
     
     # Generate Excel
-    excel_file = generate_excel_bytes(order, result)
+    excel_file = generate_excel_bytes(order, result, current_config.k2_margin_divisor, current_config.k3_margin_multiplier)
     
     headers = {
         'Content-Disposition': 'attachment; filename="calculation_export.xlsx"'

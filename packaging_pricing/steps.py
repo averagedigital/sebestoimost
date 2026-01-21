@@ -117,9 +117,8 @@ class MaterialCostStep(CalculationStep):
             elif i.features.euroslot.lower() == "bopp":
                 options_cost += c.feature_rates["euroslot_bopp"] * i.width
         
-        if i.features.clips:
-            # ТЗ: Клипсы * 2 / 200
-            # Предполагается, что rate_clips - это "Клипсы" из полей настройки.
+        if i.features.is_wicket:
+            # ТЗ: Клипсы * 2 / 200 (автоматически для викет-пакетов)
             options_cost += (c.feature_rates["clips"] * 2) / 200.0
 
         # Итого Variable Cost
@@ -154,7 +153,10 @@ class PricingStep(CalculationStep):
         # rop задан в руб/кг.
         overhead_cost = (c.rop_overhead * weight) / 1000.0
         
-        final_price = base_price_adjusted + overhead_cost
+        # Исправленная формула:
+        # Price = ((VC / k2) + VC + (rop * weight / 1000)) * k3
+        price_before_k3 = base_price + overhead_cost
+        final_price = price_before_k3 * c.k3_margin_multiplier
 
         # Формирование финального результата
         context.final_result = CalculationResult(
@@ -166,7 +168,7 @@ class PricingStep(CalculationStep):
             overhead_cost=round(overhead_cost, 4),
             options_cost=round(context.get_intermediate('options_cost'), 4),
             variable_cost=round(vc, 4),
-            final_price=round(final_price, 4),
+            final_price=round(final_price, 2),
             
             details={
                 "electricity": context.get_intermediate('electricity'),

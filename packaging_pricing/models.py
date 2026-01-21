@@ -1,10 +1,13 @@
 from enum import Enum
 from typing import Optional, Dict
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, model_validator
 
 class BagType(str, Enum):
     BOPP = "BOPP"
     CPP = "CPP"
+
+class ProductKind(str, Enum):
+    BAG = "bag"
 
 class Features(BaseModel):
     """
@@ -16,6 +19,14 @@ class Features(BaseModel):
     euroslot: Optional[str] = Field(default=None, description="Тип еврослота: 'pvd', 'bopp' или None")
     clips: bool = Field(default=False, description="Есть клипсы?")
 
+    @model_validator(mode="after")
+    def validate_options(self) -> "Features":
+        if self.glue_tape and self.dead_tape:
+            raise ValueError("glue_tape and dead_tape are mutually exclusive")
+        if not self.is_wicket and self.clips:
+            self.clips = False
+        return self
+
 class OrderInput(BaseModel):
     """
     Входные данные заказа от менеджера.
@@ -23,6 +34,7 @@ class OrderInput(BaseModel):
     """
     model_config = ConfigDict(extra='forbid')
 
+    product_kind: ProductKind = Field(default=ProductKind.BAG, description="Вид продукции")
     product_type: BagType
     width: float = Field(..., gt=0, description="Ширина (см)")
     fold: float = Field(default=0.0, ge=0, description="Складка (см)")
