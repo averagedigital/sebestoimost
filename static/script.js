@@ -53,7 +53,85 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // 7. Wicket toggle logic: disable glue/dead tape, restrict euroslot
+    const wicketToggle = document.getElementById('wicketToggle');
+    const euroslotSelect = document.querySelector('select[name="euroslot"]');
+
+    function handleWicketChange() {
+        const isWicket = wicketToggle.checked;
+
+        // Disable glue and dead tape for wicket
+        glueInput.disabled = isWicket;
+        deadGlueInput.disabled = isWicket;
+
+        if (isWicket) {
+            glueInput.checked = false;
+            deadGlueInput.checked = false;
+        }
+
+        // Apply visual styling to parent labels
+        const glueRow = glueInput.closest('.toggle-row');
+        const deadRow = deadGlueInput.closest('.toggle-row');
+        if (glueRow) glueRow.classList.toggle('disabled', isWicket);
+        if (deadRow) deadRow.classList.toggle('disabled', isWicket);
+
+        // Restrict euroslot to "Нет" for wicket
+        if (euroslotSelect) {
+            if (isWicket) {
+                euroslotSelect.value = '';
+                euroslotSelect.disabled = true;
+            } else {
+                euroslotSelect.disabled = false;
+            }
+        }
+    }
+
+    if (wicketToggle) {
+        wicketToggle.addEventListener('change', handleWicketChange);
+        // Initialize state on page load
+        handleWicketChange();
+    }
+
+    // 8. Dynamic batch weight calculation
+    const widthInput = document.querySelector('input[name="width"]');
+    const lengthInput = document.querySelector('input[name="length"]');
+    const foldInput = document.querySelector('input[name="fold"]');
+    const flapInput = document.querySelector('input[name="flap"]');
+    const thicknessInput = document.querySelector('input[name="thickness"]');
+    const quantityInput = document.querySelector('input[name="quantity"]');
+
+    function calculateBatchWeight() {
+        const density = 0.91; // g/cm³ constant
+        const width = parseFloat(widthInput.value) || 0;
+        const length = parseFloat(lengthInput.value) || 0;
+        const fold = parseFloat(foldInput.value) || 0;
+        const flap = parseFloat(flapInput.value) || 0;
+        const thickness = parseFloat(thicknessInput.value) || 0;
+        const quantity = parseInt(quantityInput.value) || 0;
+
+        // Weight formula (g) = ((width + fold) * (length + flap/2) * thickness * 2 * density) / 10000
+        const weightGrams = ((width + fold) * (length + flap / 2) * thickness * 2 * density) / 10000;
+        const batchWeightKg = (weightGrams * quantity) / 1000;
+
+        // Update display element
+        const batchWeightDisplay = document.getElementById('batchWeightDisplay');
+        if (batchWeightDisplay) {
+            batchWeightDisplay.textContent = batchWeightKg.toFixed(2) + ' кг';
+        }
+    }
+
+    // Attach listeners to all dimension/quantity inputs
+    [widthInput, lengthInput, foldInput, flapInput, thicknessInput, quantityInput].forEach(input => {
+        if (input) {
+            input.addEventListener('input', calculateBatchWeight);
+        }
+    });
+
+    // Initial calculation
+    calculateBatchWeight();
 });
+
 
 async function fetchConfig() {
     try {
